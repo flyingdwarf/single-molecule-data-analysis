@@ -1,0 +1,27 @@
+% file = '10pM_Cy3B_100mM_OSS.tif';
+% load('bgm.mat')
+
+1. "count_neo.m": count_neo(file,bgm,2)
+-- type in SBR, such as "2" here. Check the output: green spots are bright enough. 
+-- By eye, choose a SBR that gives reasonable number of green spots.
+
+
+2. "traj_extract1.m": traj = traj_extract1(file,bgm)
+-- After deciding the ratio, change line 17: "ratio = $$".
+
+
+3. "Cppass.m": [on,off,pass] = cppass(traj);
+-- line 44: "if length(cp) < $$": only pass the trajectory with more than $$ change points.
+
+
+4. "Cpplot.m": cpplot(pass);
+
+
+5. "dwelltime.m":
+-- ontime = dwelltime(on,bin)
+-- offtime = dwelltime(off,bin)
+
+
+6. "tif2avi.m"
+-- specify frame number for "data" variable before calling "tif2avi.m"
+-- In "tif2avi.m", change the video file name and the recording sequence if necessary.
