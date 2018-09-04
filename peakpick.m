@@ -1,4 +1,4 @@
-function pix = peaktest(im,ratio,offset) % peaktest involves crop but also search whole area for bright spots
+function pix = peakpick(im,ratio,offset) % peaktest involves crop and only give bright spots in cropped area.
 % im = im1;
 % ratio = 1.7;
 
@@ -21,13 +21,9 @@ edge2col = 512 - edge1; % col index corresponds to x-value
 % Find out and remove outliers
 out = [find(pos(:,1) < edge1)',find(pos(:,1) > edge2row)',...
        find(pos(:,2) < edge1)',find(pos(:,2) > edge2col)'];
-pos_out = pos(out,:);
 pos(out,:) = []; 
 
 %% Group adjacent bright peaks. Only use the group with more than or equal to 3 peaks
-% separate central peaks from outlier peaks. Append the outlier peaks.
-pos = [pos_out;pos]; % this will include the outlier peaks in the following analysis.
-
 i=1;
 % iterate until pos is empty
 while isempty(pos)==0  
@@ -52,7 +48,7 @@ peak(peaknum<3) = [];
 
 %% Get the intensity-weighted center position for each group.
 pix = cellfun(@(x) group_peaks(x,im),peak,'uniformoutput',false);
-pix = round(cell2mat(pix')); % round to integer, i.e., the index in "im"
+pix = round(cell2mat(pix')); % round to integer, i.e., the index in "im". So ONE source of pixel shift!!!!
 end
 
 function pix = group_peaks(peaks,im)
@@ -66,7 +62,6 @@ end
 pix(1) = sum(peaks(:,1).*int)/sum(int);
 pix(2) = sum(peaks(:,2).*int)/sum(int);
 end
-
 
 %pos_id=arrayfun(@(x,y) check_pix(x,y,im),pos(:,1),pos(:,2));
 %pos(pos_id==0,:)=[];

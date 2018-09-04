@@ -1,22 +1,23 @@
 clear
 
-NumFrame=1;
-spot_num=zeros(1,NumFrame)-1;
-for i=1:1:1 % specify the frame index
-    % use positions of bright spots in 1st frame as reference and 
-    % study their intensity change across trajectory.
-    
-im1=imread('Cy3B_T11_50nM_4mW_oss.tif','index',i); % remember to change the # frame
-%im1=double(im1(100:400,100:400));
-im1=double(im1); % 2D matrix stores the value on each pixel.
-position=peaktest(im1,1.3); % cant pre-allocate position bc its dimension might be different every time.
-spot_num(i)=length(position);
+NumFrame = 1;
+spot_num = zeros(1,NumFrame)-1;
+
+for i = 1:1:1
+    im1 = imread('Strep_200nM_T11_1nM_hairpin_100nM_video.tif');
+    im1 = double(im1);
+    position = peakpick(im1,1.8); % consider central area: 80th-430th pixels on x and y.
+%     position = peaktest(im1,1.8); 
+    spot_num(i) = length(position);
 end
-length(position)
+
+
 %mean(spot_num)
 imagesc(im1) 
 colorbar
 colormap gray
 hold on
-scatter(position(:,2),position(:,1),40,'g')
+scatter(position(:,2),position(:,1),40,'g') % row index (1st dimension from 'im1') is on y axis.
+xlabel('x')
+ylabel('y')
 %title('1um mb6d slide1d ostrep 100pm t20 bsainbf','fontsize',20);
